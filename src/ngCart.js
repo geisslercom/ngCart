@@ -4,7 +4,7 @@
 angular.module('ngCart', ['ngCart.directives'])
 
     .config([function () {
-
+2
     }])
 
     .provider('$ngCart', function () {
