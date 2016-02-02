@@ -4,7 +4,7 @@
 angular.module('ngCart', ['ngCart.directives'])
 
     .config([function () {
-2
+
     }])
 
     .provider('$ngCart', function () {
@@ -73,7 +73,7 @@ angular.module('ngCart', ['ngCart.directives'])
         };
 
         this.getShipping = function(){
-            if (this.getCart().items.length == 0) return 0;
+            if (this.getCart().items.length === 0) return 0;
             return  this.getCart().shipping;
         };
 
@@ -83,7 +83,7 @@ angular.module('ngCart', ['ngCart.directives'])
         };
 
         this.getTaxRate = function(){
-            return this.$cart.taxRate
+            return this.$cart.taxRate;
         };
 
         this.getTax = function(){
@@ -126,6 +126,13 @@ angular.module('ngCart', ['ngCart.directives'])
 
         this.totalCost = function () {
             return +parseFloat(this.getSubTotal() + this.getShipping() + this.getTax()).toFixed(2);
+        };
+
+        this.getTotalTax = function() {
+            var total = 0;
+            angular.forEach(this.getCart().items, function(item){
+                total += item.getTotalTax();
+            });
         };
 
         this.removeItem = function (index) {
@@ -201,14 +208,23 @@ angular.module('ngCart', ['ngCart.directives'])
 
     .factory('ngCartItem', ['$rootScope', '$log', function ($rootScope, $log) {
 
-        var item = function (id, name, price, quantity, data) {
+        var item = function (id, name, price, quantity, data, tax) {
             this.setId(id);
             this.setName(name);
             this.setPrice(price);
             this.setQuantity(quantity);
             this.setData(data);
+            this.setTax(tax);
         };
 
+        item.prototype.setTax = function(tax){
+            this._tax = tax || 0;
+            if (!tax) $log.error('tax not provided take 0 instead');
+        };
+
+        item.prototype.getTax = function(){
+            return this._tax;
+        };
 
         item.prototype.setId = function(id){
             if (id)  this._id = id;
@@ -282,6 +298,9 @@ angular.module('ngCart', ['ngCart.directives'])
         item.prototype.getTotal = function(){
             return +parseFloat(this.getQuantity() * this.getPrice()).toFixed(2);
         };
+        item.prototype.getTotalTax = function(){
+            return +parseFloat(this.getTotal() / 100 * this.getTax()).toFixed(2);
+        };
 
         item.prototype.toObject = function() {
             return {
@@ -291,7 +310,7 @@ angular.module('ngCart', ['ngCart.directives'])
                 quantity: this.getQuantity(),
                 data: this.getData(),
                 total: this.getTotal()
-            }
+            };
         };
 
         return item;
@@ -329,4 +348,4 @@ angular.module('ngCart', ['ngCart.directives'])
 
     }])
 
-    .value('version', '1.0.0');
+    .value('version', '1.0.2');

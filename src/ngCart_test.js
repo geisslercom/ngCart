@@ -64,12 +64,15 @@ describe('ngCart module', function() {
 
                     $scope.ngCart.setTaxRate(7.5);
                     $scope.ngCart.setShipping(12.50);
-                    addItem(1, 'Work boots', 189.99, 1);
-                    addItem(2, 'Hockey gloves', 85, 2);
+                    addItem(1, 'Work boots', 189.99, 1, {}, 7);
+                    addItem(2, 'Hockey gloves', 85, 2 , {}, 19);
                     addItem('cpBow', 'Compound bow', 499.95, 1);
                 });
 
-
+                it('tax of item should be at not null', function () {
+                    var items = $scope.ngCart.getItems();
+                    expect(item[0].getTax()).toEqual(7);
+                });
 
                 it('tax should be set', function() {
                     expect($scope.ngCart.getTaxRate()).toEqual(7.5);
