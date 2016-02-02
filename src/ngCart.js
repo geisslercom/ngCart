@@ -38,7 +38,7 @@ angular.module('ngCart', ['ngCart.directives'])
             };
         };
 
-        this.addItem = function (id, name, price, quantity, data) {
+        this.addItem = function (id, name, price, quantity, data, tax) {
 
             var inCart = this.getItemById(id);
 
@@ -47,7 +47,7 @@ angular.module('ngCart', ['ngCart.directives'])
                 inCart.setQuantity(quantity, false);
                 $rootScope.$broadcast('ngCart:itemUpdated', inCart);
             } else {
-                var newItem = new ngCartItem(id, name, price, quantity, data);
+                var newItem = new ngCartItem(id, name, price, quantity, data, tax);
                 this.$cart.items.push(newItem);
                 $rootScope.$broadcast('ngCart:itemAdded', newItem);
             }
@@ -202,7 +202,7 @@ angular.module('ngCart', ['ngCart.directives'])
 
         this.$save = function () {
             return store.set('cart', JSON.stringify(this.getCart()));
-        }
+        };
 
     }])
 
