@@ -133,6 +133,7 @@ angular.module('ngCart', ['ngCart.directives'])
             angular.forEach(this.getCart().items, function(item){
                 total += item.getTotalTax();
             });
+            return total;
         };
 
         this.removeItem = function (index) {
