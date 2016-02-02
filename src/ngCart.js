@@ -300,7 +300,7 @@ angular.module('ngCart', ['ngCart.directives'])
             return +parseFloat(this.getQuantity() * this.getPrice()).toFixed(2);
         };
         item.prototype.getTotalTax = function(){
-            return +parseFloat(this.getTotal() / 100 * this.getTax()).toFixed(2);
+            return +parseFloat(this.getTotal() * this.getTax() / (100+this.getTax())).toFixed(2);
         };
 
         item.prototype.toObject = function() {
